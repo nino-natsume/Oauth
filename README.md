@@ -36,10 +36,15 @@ oauth/
 
 ## 部署
 
-俩方法：
+仨方法：
 
+- 一键部署
 - Wrangler 部署
 - Worker 部署
+
+### 一键部署
+点击以下按钮自动完成部署
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/nino-natsume/Oauth)
 
 ### Wrangler部署
 
