@@ -1,0 +1,31 @@
+# Cloudflare Workers 配置 —— platform-oauth-login（合并：邮箱验证 + OAuth 第三方登录）
+# 部署：wrangler deploy
+# 敏感配置用 wrangler secret put（部署时自动保留）：
+#   GITHUB_CLIENT_ID/SECRET, GITLAB_CLIENT_ID/SECRET, MICROSOFT_CLIENT_ID/SECRET,
+#   TWITTER_CLIENT_ID/SECRET, QQ_APP_ID(在 vars)/QQ_APP_SECRET 等
+
+name = "platform-oauth-login"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# 自定义域名路由（oauth.107211.xyz → 本 Worker）
+routes = [
+  { pattern = "oauth.107211.xyz/*", zone_name = "107211.xyz" }
+]
+
+[vars]
+MICROSOFT_TENANT = "common"
+QQ_APP_ID = "1905609853"
+SECRET = "FYQhEn2ocPvXRWuMsVQASPZbdetqyAlcfnMWMJZ2dHo"
+# 主页隐藏入口变量（在主页隐形输入框里输入其「值」，不显示字符）→ 原地切换样式，路径始终为 /，不刷新：
+#   HOME_KEY 的值 → 「信息栏+两按钮」自助界面（自己用）
+#   BACK     的值 → 「信息栏+项目介绍」对外界面（可切回）
+# 均未命中则保持默认的对外界面。切换状态记于签名 cookie（mg_view，7 天）。
+# 可改为在 CF 控制台 Variables 配置，或改用 wrangler secret put HOME_KEY / BACK（更安全）
+HOME_KEY = "change-me-please"
+BACK = "change-me-too"
+
+# 配置 / 验证码持久化 KV（绑定名 STORE，与线上一致）
+[[kv_namespaces]]
+binding = "STORE"
+id = "2cce4e96cc13469d98599b3f905ed8c9"
