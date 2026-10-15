@@ -1,25 +1,27 @@
-<img src="https://img.107211.xyz/file/img/yP9XFpEh.webp" width="400" height="400" alt="绘里酱" align="right" />
 
-<div align="center">
 
 # 次元星域登录授权中心
 
+<img src="https://img.107211.xyz/file/img/yP9XFpEh.webp" width="450" height="124.5" alt="绘里酱" align="right" style="max-width:45%;height:auto;margin:8px 0 12px 24px;border-radius:12px" />
+
 > 以网页为载体，实现 OAuth 2.0 第三方登录与邮箱验证码登录
+> 
 > 内置 10 家第三方登录方式，含设备 / 系统 / 浏览器 / 归属地检测
-> 自研 SMTP 发信（基于 cloudflare:sockets），并支持 Resend API 通道，主题与 HTML 正文均可自定义
-> 内含管理面板，配置、发信、授权全部在页面完成，无需改代码
-> 支持混淆前端内联脚本、AES-GCM 加密存储敏感字段
+> 
+> 自研 SMTP 发信（基于 cloudflare:sockets）
 >
+> 支持主流邮件通道(QQ/163/Gmail/Resend)，主题与 HTML 均可自定义
+> 
+> 内含管理面板，配置、发信、授权全部在页面完成，无需改代码
+> 
+> 支持混淆前端内联脚本、AES-GCM 加密存储敏感字段
+
 > ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-f38020?logo=cloudflare&logoColor=white)
 > ![Deploy wrangler](https://img.shields.io/badge/deploy-wrangler-f38020?logo=cloudflare&logoColor=white)
 > ![License AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-lightgrey)
 > ![Code worker.js](https://img.shields.io/badge/code-worker.js%20%C2%B7%20single%20file-7c3aed)
 
-</div>
-
 ---
-
-本仓库是一个 **Cloudflare Worker 单文件应用**：没有 `package.json`、没有构建步骤，代码全部在 `worker.js`，配置全部在 `wrangler.toml`，用 `wrangler deploy` 即可上线。
 
 ## 目录结构
 
@@ -91,22 +93,24 @@ wrangler secret put QQ_APP_SECRET
 | `MICROSOFT_TENANT` | Microsoft 租户，默认 `common` |
 | `QQ_APP_ID` | QQ 应用 ID（非敏感，放 vars） |
 
-**第三方登录密钥**（配置了 ID 的登录方式才会出现在 `/oauth` 页面）
+**第三方登录密钥**（配置了 ID 的登录方式才会出现在 `/oauth` 页面，Secret 一律用 `wrangler secret put` 下发）
 
-| 登录方式 | ID 变量 | Secret 变量 |
-| --- | --- | --- |
-| `google` | `GOOGLE_CLIENT_ID` | `GOOGLE_CLIENT_SECRET` |
-| `github` | `GITHUB_CLIENT_ID` | `GITHUB_CLIENT_SECRET` |
-| `microsoft` | `MICROSOFT_CLIENT_ID` | `MICROSOFT_CLIENT_SECRET` |
-| `microsoft_msa` | `MICROSOFT_MSA_CLIENT_ID` | `MICROSOFT_MSA_CLIENT_SECRET` |
-| `twitter` | `TWITTER_CLIENT_ID` | `TWITTER_CLIENT_SECRET` |
-| `gitlab` | `GITLAB_CLIENT_ID` | `GITLAB_CLIENT_SECRET` |
-| `discord` | `DISCORD_CLIENT_ID` | `DISCORD_CLIENT_SECRET` |
-| `wechat` | `WECHAT_APP_ID` | `WECHAT_APP_SECRET` |
-| `weibo` | `WEIBO_CLIENT_ID` | `WEIBO_CLIENT_SECRET` |
-| `qq` | `QQ_APP_ID` | `QQ_APP_SECRET` |
+需注意：以下：`wechat`、`weibo`、`qq`均需完成人工审核才可开 Oauth，未审核或审核未过在登录时会报错
 
-各平台的回调地址统一为：`https://<你的域名>/callback/<登录方式 id>`。
+| 登录方式 | ID 变量 | Secret 变量 | Oauth 申请站点 |
+| --- | --- | --- | --- |
+| `google` | `GOOGLE_CLIENT_ID` | `GOOGLE_CLIENT_SECRET` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials)：「API 和服务 → 凭据」创建 OAuth 客户端 ID，类型选 **Web 应用** |
+| `github` | `GITHUB_CLIENT_ID` | `GITHUB_CLIENT_SECRET` | [GitHub → Settings → Developer settings → OAuth Apps](https://github.com/settings/developers/apps)：新建 **OAuth App** |
+| `microsoft` | `MICROSOFT_CLIENT_ID` | `MICROSOFT_CLIENT_SECRET` | [Microsoft Entra 管理中心](https://entra.microsoft.com/) →「应用注册」：账户类型按需含「个人 Microsoft 账户」，API 权限勾选 openid / email / profile / User.Read |
+| `microsoft_msa` | `MICROSOFT_MSA_CLIENT_ID` | `MICROSOFT_MSA_CLIENT_SECRET` | 同上「应用注册」：账户类型**仅**选「仅限个人 Microsoft 账户」（对应 consumers 租户） |
+| `X(twitter)` | `TWITTER_CLIENT_ID` | `TWITTER_CLIENT_SECRET` | [X Developer Portal](https://developer.x.com/en/portal/dashboard)：创建 App，User authentication settings 中 Type 选 **Web App**，开启 OAuth 2.0 |
+| `gitlab` | `GITLAB_CLIENT_ID` | `GITLAB_CLIENT_SECRET` | [GitLab → 用户设置 → 应用程序](https://gitlab.com/-/user_settings/applications)：新建应用，Scope 勾选 `read_user` |
+| `discord` | `DISCORD_CLIENT_ID` | `DISCORD_CLIENT_SECRET` | [Discord Developer Portal](https://discord.com/developers/applications)：新建 Application →「OAuth2」页获取 Client ID / Secret |
+| `wechat` | `WECHAT_APP_ID` | `WECHAT_APP_SECRET` | [微信开放平台](https://open.weixin.qq.com/)：登录后「网站接入 → 网站应用」创建并交由审核 |
+| `weibo` | `WEIBO_CLIENT_ID` | `WEIBO_CLIENT_SECRET` | [微博开放平台](https://open.weibo.com/)：「网站接入」申请成为开发者并创建网站应用 |
+| `qq` | `QQ_APP_ID` | `QQ_APP_SECRET` | [QQ 互联](https://connect.qq.com/)：「网站应用 → 创建应用」并完成审核 |
+
+各平台的回调地址统一为：`https://<你的域名>/callback/<登录方式 id>`，如 `https://oauth.ciallo.cc/callback/github`
 
 ## 用法
 
