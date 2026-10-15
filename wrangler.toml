@@ -1,24 +1,19 @@
 # Cloudflare Workers 配置 —— platform-oauth-login（合并：邮箱验证 + OAuth 第三方登录）
-# 手动部署：wrangler deploy
-# 敏感配置用 wrangler secret put（部署时自动保留）：
-#   GITHUB_CLIENT_ID/SECRET, GITLAB_CLIENT_ID/SECRET, MICROSOFT_CLIENT_ID/SECRET,
-#   TWITTER_CLIENT_ID/SECRET, QQ_APP_ID(在 vars)/QQ_APP_SECRET 等
 #
-# 注意：使用「Deploy to Cloudflare」按钮时，本文件的值必须有合法默认值
-# （不能使用 <...> 这类占位符，否则会提示「解析 Wrangler 配置文件时出现问题」）。
-# 其中的 KV id 会在部署时被自动替换为新创建命名空间的 id。
+# 必填项：name（项目名称）、[vars] 中的 SECRET / HOME_KEY / BACK、KV 绑定 STORE
+# 其余变量均为选填，代码内已有默认值（如 MICROSOFT_TENANT 默认 common），可直接删除或注释
+#
+# 手动部署：wrangler deploy；敏感配置用 wrangler secret put（部署时自动保留）
+#   可用 secret 下发：GITHUB/GITLAB/MICROSOFT/TWITTER 的 CLIENT_ID/SECRET、QQ_APP_SECRET 等
+# 「Deploy to Cloudflare」按钮：KV id 会在部署时自动替换为新建命名空间的 id
 
-name = "platform-oauth-login"
+name = "platform-oauth-login"     # 必填：项目（Worker）名称
 main = "worker.js"
 compatibility_date = "2025-01-01"
-# 未绑定自定义域名时先用 workers.dev 子域访问；域名可在部署后于控制台添加
-workers_dev = true
 
 [vars]
-# Microsoft 租户：common（个人+组织）| consumers（仅个人）| organizations（仅组织）| 具体租户 ID
-MICROSOFT_TENANT = "common"
-QQ_APP_ID = "change-me"
-# 加密密钥（加密敏感字段 / OAuth state 签名）；部署后请改用 wrangler secret put SECRET
+# ────────────── 必填 ──────────────
+# 加密密钥（加密敏感字段 / OAuth state 签名）；部署后建议改用 wrangler secret put SECRET
 SECRET = "change-me"
 # 主页隐藏入口变量（在主页隐形输入框里输入其「值」，不显示字符）→ 原地切换样式，路径始终为 /，不刷新：
 #   HOME_KEY 的值 → 「信息栏+两按钮」自助界面（自己用）
@@ -28,9 +23,15 @@ SECRET = "change-me"
 HOME_KEY = "change-me-please"
 BACK = "change-me-too"
 
-# 配置 / 验证码持久化 KV（绑定名固定为 STORE）
+# ────────────── 选填 ──────────────
+# Microsoft 租户：common（默认，个人+组织）| consumers（仅个人）| organizations（仅组织）| 具体租户 ID
+# MICROSOFT_TENANT = "common"
+# QQ 应用 ID（也可部署后用 secret / 控制台配置）
+# QQ_APP_ID = ""
+
+# 配置 / 验证码持久化 KV —— 必填（绑定名固定为 STORE）
 # 手动部署：wrangler kv namespace create STORE 后把 id 换成返回的 id
-# 部署按钮：保留下面的默认 id 即可，部署时会自动创建命名空间并回写真实 id
+# 部署按钮：保留默认 id 即可，部署时会自动创建命名空间并回写真实 id
 [[kv_namespaces]]
 binding = "STORE"
 id = "00000000000000000000000000000000"
