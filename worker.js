@@ -181,7 +181,7 @@ const DEF = {
  <div style="max-width:480px;margin:0 auto;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.10);">
   <div style="height:4px;background:linear-gradient(90deg,#ffb7c5,#ff8fa8,#ffb7c5);"></div>
   <div style="padding:30px 30px 26px;">
-   <div style="font-size:13px;color:#6b7280;margin:0 0 14px;"><b style="color:#1f2937;font-weight:700;">MAILGATE</b></div>
+   <div style="font-size:13px;color:#6b7280;margin:0 0 14px;"><b style="color:#1f2937;font-weight:700;"><img src="https://img.107211.xyz/file/img/yP9XFpEh.webp" width="450" height="124.5" alt="绘里酱" align="center" style="max-width:45%;height:auto;margin:8px 0 12px 24px;border-radius:12px" /></b></div>
    <h1 style="font-size:20px;font-weight:800;margin:0 0 16px;color:#e0567e;">{{site}} · 邮箱验证码</h1>
    <div style="border-top:1px solid #e5e7eb;padding-top:16px;font-size:14px;line-height:1.8;">
     验证码用于验证邮箱 <b>{{email}}</b>：
@@ -1519,7 +1519,7 @@ async function pgAdminPanel(req, env) {
 <body>
 <main class="card card-admin">
   <div class="topbar"><a class="back" href="/">← 返回主页</a></div>
-  <div class="brand"><b>MAILGATE</b><span class="st">${kvOn ? "KV 已连接" : "仅内存"}</span></div>
+  <div class="brand"><b><img src="https://img.107211.xyz/file/img/yP9XFpEh.webp" width="450" height="124.5" alt="绘里酱" align="center" style="max-width:45%;height:auto;margin:8px 0 12px 24px;border-radius:12px" /></b><span class="st">${kvOn ? "KV 已连接" : "仅内存"}</span></div>
   <h1>管理面板</h1>
   ${warn}
 
@@ -2835,14 +2835,14 @@ function renderResultPage({ ok, title, reason = "", hint = "", provider = "", pl
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>${esc(title)} · MAILGATE</title>
+  <title>${esc(title)} · <img src="https://img.107211.xyz/file/img/yP9XFpEh.webp" width="450" height="124.5" alt="绘里酱" align="center" style="max-width:45%;height:auto;margin:8px 0 12px 24px;border-radius:12px" /></title>
   <style>${CSS}</style>
 </head>
 <body>
   ${modal}
   ${redirectJS}
   <main class="card">
-    <div class="brand"><b>MAILGATE</b></div>
+    <div class="brand"><b><img src="https://img.107211.xyz/file/img/yP9XFpEh.webp" width="450" height="124.5" alt="绘里酱" align="center" style="max-width:45%;height:auto;margin:8px 0 12px 24px;border-radius:12px" /></b></div>
     <h1>${esc(title)}</h1>
     ${!ok && (reason || hint) ? `<div class="status fail">${reason ? `<div class="why">${esc(reason)}</div>` : ""}${hint ? `<div class="hint">${esc(hint)}</div>` : ""}</div>` : ""}
     ${profileBox}
